@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { Divisi } from "@/types/pengurus";
+import { normalizePengurusImageUrl } from "@/services/pengurusService";
 import DivisionButtonCard from "./DivisionLogo";
 import { 
   X, 
@@ -90,11 +91,19 @@ export default function DivisionModal({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={
-                (isSingleLeader && mainLeader
-                  ? mainLeader.photo_url || division.group_photo_url
-                  : division.group_photo_url) || "/images/persekutuan.webp"
+                normalizePengurusImageUrl(
+                  (isSingleLeader && mainLeader
+                    ? mainLeader.photo_url || division.group_photo_url
+                    : division.group_photo_url) || "/images/persekutuan.webp"
+                )
               }
               alt={isSingleLeader && mainLeader ? mainLeader.name : division.name}
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.src.includes("/images/persekutuan.webp")) {
+                  target.src = "/images/persekutuan.webp";
+                }
+              }}
               className="w-full h-full object-cover rounded-2xl"
             />
           </div>
@@ -148,7 +157,7 @@ export default function DivisionModal({
                         >
                           <div className="relative w-12 h-12 rounded-full overflow-hidden bg-slate-200 border-2 border-amber-400/40 shadow-xs shrink-0">
                             <Image
-                              src={leader.photo_url || "/images/persekutuan.webp"}
+                              src={normalizePengurusImageUrl(leader.photo_url)}
                               alt={leader.name}
                               fill
                               unoptimized
@@ -184,7 +193,7 @@ export default function DivisionModal({
                         >
                           <div className="relative w-10 h-10 rounded-full overflow-hidden bg-slate-200 border border-slate-300 shrink-0">
                             <Image
-                              src={m.photo_url || "/images/persekutuan.webp"}
+                              src={normalizePengurusImageUrl(m.photo_url)}
                               alt={m.name}
                               fill
                               unoptimized

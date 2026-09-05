@@ -49,7 +49,7 @@ export default function PengurusPage() {
         
         {/* Back Navigation Button */}
         <Link
-          href="/home"
+          href="/"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 hover:bg-white text-xs sm:text-sm font-bold text-slate-700 hover:text-primary border border-white/80 shadow-sm backdrop-blur-md transition-all mb-8 group"
         >
           <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />

@@ -178,18 +178,42 @@ export const DEFAULT_DIVISIONS: Divisi[] = [
   }
 ];
 
+export function normalizePengurusImageUrl(url?: string): string {
+  if (!url || !url.trim()) {
+    return "/images/persekutuan.webp";
+  }
+  if (url.includes("pub-317e9a74788b4b17a1deee01aa307c7c.r2.dev")) {
+    return url.replace(
+      "https://pub-317e9a74788b4b17a1deee01aa307c7c.r2.dev",
+      "https://pmkdaniel-api.danielmemory26.workers.dev/api/upload"
+    );
+  }
+  return url;
+}
+
+function normalizeDivision(div: Divisi): Divisi {
+  return {
+    ...div,
+    group_photo_url: normalizePengurusImageUrl(div.group_photo_url),
+    members: (div.members || []).map(m => ({
+      ...m,
+      photo_url: normalizePengurusImageUrl(m.photo_url),
+    })),
+  };
+}
+
 function getLocalDivisions(): Divisi[] {
-  if (typeof window === "undefined") return DEFAULT_DIVISIONS;
+  if (typeof window === "undefined") return DEFAULT_DIVISIONS.map(normalizeDivision);
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_DIVISI_KEY);
     if (!raw) {
-      localStorage.setItem(LOCAL_STORAGE_DIVISI_KEY, JSON.stringify(DEFAULT_DIVISIONS));
-      return DEFAULT_DIVISIONS;
+      localStorage.setItem(LOCAL_STORAGE_DIVISI_KEY, JSON.stringify(DEFAULT_DIVISIONS.map(normalizeDivision)));
+      return DEFAULT_DIVISIONS.map(normalizeDivision);
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_DIVISIONS;
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed.map(normalizeDivision) : DEFAULT_DIVISIONS.map(normalizeDivision);
   } catch (e) {
-    return DEFAULT_DIVISIONS;
+    return DEFAULT_DIVISIONS.map(normalizeDivision);
   }
 }
 
@@ -209,7 +233,7 @@ export const pengurusService = {
     try {
       const res = await apiClient.get<ApiResponse<Divisi[]>>("/pengurus", { timeout: 4000 });
       if (res.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
-        apiData = res.data.data;
+        apiData = res.data.data.map(normalizeDivision);
       }
     } catch (err) {}
 
@@ -359,14 +383,23 @@ export const pengurusService = {
    * Upload division photo or portrait to Cloudflare R2
    */
   async uploadPhoto(file: File): Promise<string> {
-    const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : "";
+    const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+    const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
+    if (file.size > MAX_IMAGE_SIZE) {
+      throw new Error("Ukuran gambar melebihi batas 5MB");
+    }
+
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type.toLowerCase())) {
+      throw new Error("Format gambar tidak diizinkan. Hanya menerima JPG, PNG, atau WEBP.");
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
     try {
       const res = await apiClient.post<ApiResponse<{ url: string }>>("/upload", formData, {
         headers: {
-          "Authorization": `Bearer ${token || ""}`,
           "Content-Type": "multipart/form-data",
         },
         timeout: 15000,

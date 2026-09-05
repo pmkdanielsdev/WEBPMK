@@ -38,6 +38,25 @@ export default function OrgChartTree({
   const sekretaris = findDiv("sekretaris", "Sekretaris");
   const bendahara = findDiv("bendahara", "Bendahara");
 
+  // Merge Sekretaris & Bendahara into Sekben (or find existing sekben division)
+  const existingSekben = divisions.find(
+    (d) => d.id === "sekben" || d.name.toLowerCase().includes("sekben")
+  );
+  const sekben: Divisi = existingSekben || {
+    id: "sekben",
+    name: "Sekretariat & Kebendaharaan",
+    komisi: "BPH",
+    icon_name: "pen",
+    description:
+      "Mengelola tata kelola administrasi surat-menyurat, arsip rapat, serta sirkulasi keuangan, transparansi pembukuan kas, dan penyusunan anggaran PMK Daniel FILKOM UB.",
+    group_photo_url: sekretaris.group_photo_url || bendahara.group_photo_url || "/images/persekutuan.webp",
+    order_priority: 3,
+    members: [
+      ...(sekretaris.members || []),
+      ...(bendahara.members || []),
+    ],
+  };
+
   const pembinaan = findDiv("pembinaan", "Pembinaan");
   const pemerhati = findDiv("pemerhati", "Pemerhati");
   const acara = findDiv("acara", "Acara");
@@ -113,30 +132,16 @@ export default function OrgChartTree({
             />
           </div>
 
-          {/* Line connector down (dashed) */}
-          <div className="w-0.5 h-3 border-l-2 border-dashed border-primary/50" />
+          {/* Line connector down */}
+          <div className="w-0.5 h-3 bg-primary/40" />
 
-          {/* Sekretaris & Bendahara Vertical Stack with dashed lines */}
-          <div className="relative flex flex-col gap-2.5 pl-4 border-l-2 border-dashed border-primary/50 w-full max-w-[240px]">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Sekretariat & Kebendaharaan:
-            </span>
-            <div className="relative flex items-center">
-              <div className="absolute -left-4 w-4 border-t-2 border-dashed border-primary/50" />
-              <DivisionButtonCard
-                divisionId={sekretaris.id}
-                onClick={() => onSelectDivision(sekretaris)}
-                className="w-full"
-              />
-            </div>
-            <div className="relative flex items-center">
-              <div className="absolute -left-4 w-4 border-t-2 border-dashed border-primary/50" />
-              <DivisionButtonCard
-                divisionId={bendahara.id}
-                onClick={() => onSelectDivision(bendahara)}
-                className="w-full"
-              />
-            </div>
+          {/* Sekben (Sekretariat & Kebendaharaan) */}
+          <div className="w-full max-w-[240px]">
+            <DivisionButtonCard
+              divisionId="sekben"
+              onClick={() => onSelectDivision(sekben)}
+              className="w-full"
+            />
           </div>
         </div>
 
@@ -261,61 +266,34 @@ export default function OrgChartTree({
             <div className="w-0.5 h-6 bg-primary/50" />
           </div>
 
-          {/* LEVEL 2: WAKIL KETUA UMUM & (SEKRETARIS + BENDAHARA VERTICAL DASHED) */}
-          <div className="relative flex items-center justify-center w-full max-w-[800px] min-h-[140px]">
-            
-            {/* Center Spine: Wakil Ketua Umum */}
-            <div className="flex flex-col items-center relative z-10">
-              <div className="w-[210px]">
-                <DivisionButtonCard
-                  divisionId={wakilKetuaUmum.id}
-                  onClick={() => onSelectDivision(wakilKetuaUmum)}
-                  className="w-[210px]"
-                />
-              </div>
+          {/* LEVEL 2: WAKIL KETUA UMUM */}
+          <div className="flex flex-col items-center">
+            <div className="w-[210px]">
+              <DivisionButtonCard
+                divisionId={wakilKetuaUmum.id}
+                onClick={() => onSelectDivision(wakilKetuaUmum)}
+                className="w-[210px]"
+              />
             </div>
-
-            {/* Sekretaris & Bendahara Vertically Stacked to the Right with Dashed Lines */}
-            <div className="absolute left-[calc(50%+105px)] top-1/2 -translate-y-1/2 flex items-center">
-              {/* Horizontal dashed branch connector from center */}
-              <div className="w-8 border-t-2 border-dashed border-primary/50" />
-
-              {/* Vertical dashed spine */}
-              <div className="relative flex flex-col gap-2.5 pl-3 border-l-2 border-dashed border-primary/50 py-1">
-                {/* Sekretaris */}
-                <div className="relative flex items-center">
-                  <div className="absolute -left-3 w-3 border-t-2 border-dashed border-primary/50" />
-                  <div className="w-[180px]">
-                    <DivisionButtonCard
-                      divisionId={sekretaris.id}
-                      onClick={() => onSelectDivision(sekretaris)}
-                      className="w-[180px]"
-                    />
-                  </div>
-                </div>
-
-                {/* Bendahara */}
-                <div className="relative flex items-center">
-                  <div className="absolute -left-3 w-3 border-t-2 border-dashed border-primary/50" />
-                  <div className="w-[180px]">
-                    <DivisionButtonCard
-                      divisionId={bendahara.id}
-                      onClick={() => onSelectDivision(bendahara)}
-                      className="w-[180px]"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            <div className="w-0.5 h-6 bg-primary/50" />
           </div>
 
-          <div className="w-0.5 h-8 bg-primary/50" />
+          {/* LEVEL 3: SEKBEN (Di bawah Wakil Ketua Umum) */}
+          <div className="flex flex-col items-center">
+            <div className="w-[210px]">
+              <DivisionButtonCard
+                divisionId="sekben"
+                onClick={() => onSelectDivision(sekben)}
+                className="w-[210px]"
+              />
+            </div>
+            <div className="w-0.5 h-8 bg-primary/50" />
+          </div>
 
-          {/* LEVEL 3 & 4: 4 KOMISI SEJAJAR DENGAN SUB-DIVISI VERTIKAL */}
+          {/* LEVEL 4: 4 KOMISI SEJAJAR DENGAN SUB-DIVISI VERTIKAL */}
           <div className="relative w-full flex flex-col items-center">
             
-            {/* Level 3 Horizontal Main Bus Line */}
+            {/* Level 4 Horizontal Main Bus Line */}
             <div className="absolute top-0 left-[110px] right-[110px] h-0.5 bg-primary/50" />
 
             {/* 4 Equal Commission Columns Grid */}

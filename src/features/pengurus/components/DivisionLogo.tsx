@@ -25,6 +25,10 @@ const BUTTON_IMAGE_MAP: Record<string, { light: string; dark: string }> = {
     light: "/images/logos/bendahara bg putih.png",
     dark: "/images/logos/bendahara bg biru.png",
   },
+  sekben: {
+    light: "/images/logos/sekben bg putih.png",
+    dark: "/images/logos/sekben bg biru.png",
+  },
   pembinaan: {
     light: "/images/logos/pembinaan bg putih.png",
     dark: "/images/logos/pembinaan bg biru.png",
@@ -81,6 +85,7 @@ export function getDivisionButtonImages(divisionId?: string) {
   // Fallbacks by partial keywords
   if (key.includes("ketua") && !key.includes("wakil")) return BUTTON_IMAGE_MAP.ketua_umum;
   if (key.includes("wakil") || key.includes("waketum")) return BUTTON_IMAGE_MAP.wakil_ketua_umum;
+  if (key.includes("sekben") || key.includes("sekretariat")) return BUTTON_IMAGE_MAP.sekben;
   if (key.includes("sekretaris")) return BUTTON_IMAGE_MAP.sekretaris;
   if (key.includes("bendahara")) return BUTTON_IMAGE_MAP.bendahara;
   if (key.includes("pembinaan")) return BUTTON_IMAGE_MAP.pembinaan;

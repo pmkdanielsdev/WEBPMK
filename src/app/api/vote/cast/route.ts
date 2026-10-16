@@ -1,27 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { verifyVoterToken, hashVoterEmail, isCandidateValid } from '@/lib/security';
+import { verifyVoterToken, hashVoterEmail, isCandidateValid, isValidUbStudentEmail } from '@/lib/security';
 import { getSupabaseServerClient } from '@/lib/supabase';
 import { globalStore } from '@/lib/store';
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { token, candidateId } = body;
+    const { token, candidateId, email } = body;
+    let voterToken = token;
+    let voterEmail = '';
 
-    if (!token || !candidateId) {
+    if (!candidateId) {
       return NextResponse.json(
-        { success: false, message: 'Token otentikasi dan pilihan kandidat wajib disertakan.' },
+        { success: false, message: 'Pilihan kandidat wajib disertakan.' },
         { status: 400 }
       );
     }
 
-    // 1. Verifikasi integritas token pemilih
-    const tokenVerification = verifyVoterToken(token);
-    if (!tokenVerification.valid || !tokenVerification.email) {
+    if (!voterToken && email) {
+      const cleanEmail = String(email).trim().toLowerCase();
+      if (!isValidUbStudentEmail(cleanEmail)) {
+        return NextResponse.json(
+          { success: false, message: 'Hanya email resmi mahasiswa Universitas Brawijaya (@student.ub.ac.id) yang diizinkan.' },
+          { status: 403 }
+        );
+      }
+      voterEmail = cleanEmail;
+    } else if (voterToken) {
+      // 1. Verifikasi integritas token pemilih
+      const tokenVerification = verifyVoterToken(voterToken);
+      if (!tokenVerification.valid || !tokenVerification.email) {
+        return NextResponse.json(
+          { success: false, message: tokenVerification.error || 'Token verifikasi tidak sah atau telah kadaluarsa.' },
+          { status: 401 }
+        );
+      }
+      voterEmail = tokenVerification.email;
+    } else {
       return NextResponse.json(
-        { success: false, message: tokenVerification.error || 'Token verifikasi tidak sah atau telah kadaluarsa.' },
-        { status: 401 }
+        { success: false, message: 'Email mahasiswa UB atau token verifikasi wajib disertakan.' },
+        { status: 400 }
       );
     }
 
@@ -33,8 +52,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const email = tokenVerification.email;
-    const emailHash = hashVoterEmail(email);
+    const emailToUse = voterEmail;
+    const emailHash = hashVoterEmail(emailToUse);
     const supabase = getSupabaseServerClient();
 
     // 3. Eksekusi voting via fungsi transaksional Supabase RPC (cast_vote)
@@ -102,7 +121,7 @@ export async function POST(req: NextRequest) {
 
     // Catat informasi lengkap pemilih agar admin dapat melihat semua informasi
     globalStore.mockVoterDetails?.push({
-      email: email,
+      email: emailToUse,
       email_hash: emailHash,
       candidate_id: candidateId,
       candidate_name: candidateId.charAt(0).toUpperCase() + candidateId.slice(1),

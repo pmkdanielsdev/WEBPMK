@@ -7,7 +7,7 @@ export const CANDIDATES: Candidate[] = [
     displayName: 'Joseph',
     number: 1,
     tagline: 'Membangun Persekutuan yang Berakar, Bertumbuh, dan Berdampak Nyata',
-    avatarColor: '#2563eb', // Royal Blue
+    avatarColor: '#3E4095', // PMK Primary Indigo
     vision: 'Mewujudkan wadah regenerasi dan persekutuan mahasiswa yang kokoh secara spiritual, memiliki integritas tinggi, dan menjadi terang di lingkungan kampus maupun masyarakat luas.',
     mission: [
       'Menyelenggarakan pembinaan rohani yang berbobot dan relevan dengan tantangan mahasiswa masa kini.',
@@ -21,7 +21,7 @@ export const CANDIDATES: Candidate[] = [
     displayName: 'Zoe',
     number: 2,
     tagline: 'Kepemimpinan Melayani Berlandaskan Kasih, Integritas, dan Inovasi',
-    avatarColor: '#7c3aed', // Purple Violet
+    avatarColor: '#F58732', // PMK Secondary Amber Flame
     vision: 'Menciptakan lingkungan persekutuan yang suportif, transparan, dan inklusif di mana setiap talenta dihargai dan diberdayakan secara maksimal untuk pelayanan.',
     mission: [
       'Membangun sistem komunikasi dan koordinasi yang responsif dan transparan.',
@@ -35,7 +35,7 @@ export const CANDIDATES: Candidate[] = [
     displayName: 'Anna',
     number: 3,
     tagline: 'Menghadirkan Rumah Persekutuan yang Hangat, Adaptif, dan Mengayomi',
-    avatarColor: '#db2777', // Rose Pink
+    avatarColor: '#2B2C6E', // PMK Primary Dark
     vision: 'Menjadikan persekutuan sebagai rumah yang memulihkan dan menumbuhkan, di mana setiap mahasiswa menemukan dukungan iman dan persaudaraan tanpa sekat.',
     mission: [
       'Memperkuat kelompok-kelompok kecil (cell group) sebagai inti pemuridan dan pendampingan personal.',
@@ -49,7 +49,7 @@ export const CANDIDATES: Candidate[] = [
     displayName: 'Nata',
     number: 4,
     tagline: 'Transformasi Karakter Menuju Kedewasaan Iman dan Profesionalisme',
-    avatarColor: '#ea580c', // Vibrant Orange
+    avatarColor: '#C76417', // PMK Flame Dark
     vision: 'Mencetak kader-kader pemimpin mahasiswa yang tidak hanya unggul secara akademis dan rohani, namun juga siap berkontribusi secara profesional di dunia kerja.',
     mission: [
       'Memperdalam pemahaman firman dan doktrin iman yang kontekstual bagi generasi muda.',
@@ -63,7 +63,7 @@ export const CANDIDATES: Candidate[] = [
     displayName: 'Chelsea',
     number: 5,
     tagline: 'Sinergi Pelayanan Kreatif, Solutif, dan Berkelanjutan di Era Digital',
-    avatarColor: '#059669', // Emerald Green
+    avatarColor: '#5D5FC4', // PMK Indigo Light
     vision: 'Mendorong modernisasi pelayanan melalui pemanfaatan media digital dan teknologi kreatif, guna menjangkau lebih banyak mahasiswa Universitas Brawijaya.',
     mission: [
       'Menghadirkan konten rohani dan informasi kegiatan yang inspiratif di berbagai platform digital.',

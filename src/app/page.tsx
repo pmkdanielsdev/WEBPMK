@@ -292,15 +292,15 @@ export default function VotingPage() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               <Link
-                href="/mc"
+                href="/hasil"
                 target="_blank"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#F58732] hover:bg-[#E07421] text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-xs transition"
               >
                 <BarChart3 className="w-4 h-4" />
-                Lihat Hasil di Layar MC
+                Lihat Grafik Hasil
               </Link>
               <Link
-                href="/admin"
+                href="/aaddmmiinn"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#3E4095] hover:bg-[#2B2C6E] text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-xs transition"
               >
                 <ShieldCheck className="w-4 h-4" />

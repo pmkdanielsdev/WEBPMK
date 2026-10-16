@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ShieldCheck, BarChart3, Vote } from 'lucide-react';
+import { ShieldCheck, BarChart3 } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -55,22 +55,22 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/mc"
+            href="/hasil"
             target="_blank"
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              pathname === '/mc'
+              pathname === '/hasil'
                 ? 'text-[#F58732] bg-[#F58732]/10 border border-[#F58732]/30'
                 : 'text-slate-600 hover:text-[#F58732] hover:bg-orange-50/50'
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-[#F58732] animate-pulse" />
-            <span>Layar MC</span>
+            <span>Layar Hasil</span>
           </Link>
 
           <Link
-            href="/admin"
+            href="/aaddmmiinn"
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              pathname === '/admin'
+              pathname === '/aaddmmiinn'
                 ? 'text-[#3E4095] bg-[#3E4095]/10 border border-[#3E4095]/30'
                 : 'text-slate-600 hover:text-[#3E4095] hover:bg-indigo-50/50'
             }`}

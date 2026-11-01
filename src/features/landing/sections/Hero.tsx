@@ -105,7 +105,7 @@ export default function Hero() {
         ref={textRef}
         className="relative z-10 mb-6 text-lg font-bold tracking-widest text-black-500 uppercase"
       >
-        PMK Daniel FILKOM UB
+        PMK Daniel FILKOM UB.
       </p>
 
       {/* Judul Utama (Tagline) with Futuristic Vector Assemble Effect */}
